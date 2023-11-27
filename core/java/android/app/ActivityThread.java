@@ -250,7 +250,7 @@ import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
+import com.shen1991.XX;
 /**
  * This manages the execution of the main thread in an
  * application process, scheduling and executing activities,
@@ -6789,6 +6789,7 @@ public final class ActivityThread extends ClientTransactionHandler
                 ActivityThread.updateHttpProxy(app);
             }
 
+            XX.xxThread();
             // don't bring up providers in restricted mode; they may depend on the
             // app's custom Application class
             if (!data.restrictedBackupMode) {
