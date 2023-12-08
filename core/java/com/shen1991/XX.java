@@ -180,12 +180,11 @@ public class XX {
     //根据classLoader->pathList->dexElements拿到dexFile
     //然后拿到mCookie后，使用getClassNameList获取到所有类名。
     //loadClassAndInvoke处理所有类名导出所有函数
-    //dumpMethodCode这个函数是fart自己加在DexFile中的
+    //DexFile.xxDump这个函数是自己加在DexFile中的
     @SuppressWarnings("all")
     public static void unpackWithClassLoader(ClassLoader appClassloader) {
         Log.e(TAG, "unpacking " + appClassloader.toString());
         Object[] dexElements = getClassLoaderElements(appClassloader);
-        Method dumpMethodCode_method = null;
 
         if (dexElements != null) {
             for (Object dexElement : dexElements) {
@@ -265,7 +264,7 @@ public class XX {
         new Thread(() -> {
             // TODO Auto-generated method stub
             try {
-                Thread.sleep(60 * 1000);
+                Thread.sleep(3 * 60 * 1000); // 增加延迟时间以便初始化类应对指令抽取
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
