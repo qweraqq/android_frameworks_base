@@ -1,0 +1,7 @@
+{
+   "interaction": {
+     "type": "script-directory",
+     "on_change": "rescan",
+     "path": "/data/local/tmp/ss"
+   }
+}

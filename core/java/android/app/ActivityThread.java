@@ -250,6 +250,8 @@ import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import com.shen1991.XX;
 /**
  * This manages the execution of the main thread in an
@@ -6767,6 +6769,25 @@ public final class ActivityThread extends ClientTransactionHandler
         final StrictMode.ThreadPolicy savedPolicy = StrictMode.allowThreadDiskWrites();
         final StrictMode.ThreadPolicy writesAllowedPolicy = StrictMode.getThreadPolicy();
         try {
+	    // frida
+	    String processName = ActivityThread.currentProcessName();
+	    BufferedReader br = null;
+	    String configPath = "/data/local/tmp/ff.config";
+	    try {
+	        br = new BufferedReader(new FileReader(configPath));
+		String line;
+		while ((line = br.readLine()) != null) {
+		    if(System.getProperty("os.arch").indexOf("64") >= 0) {
+		        System.load("/system/lib64/libhuawei.so");
+		    } else {
+		        System.load("/system/lib/libhuawei.so");
+		    }
+		    break;
+	        }
+	        br.close();
+	    } catch (Exception ignored){
+	            ;
+	    }
             // If the app is being launched for full backup or restore, bring it up in
             // a restricted environment with the base application class.
             app = data.info.makeApplicationInner(data.restrictedBackupMode, null);
