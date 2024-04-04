@@ -64,6 +64,8 @@
 #include <sys/un.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <dlfcn.h>
+#include <string.h>
 
 #include <android-base/file.h>
 #include <android-base/logging.h>
@@ -2547,6 +2549,29 @@ static void com_android_internal_os_Zygote_nativeSpecializeAppProcess(
                      instruction_set, app_data_dir, is_top_app == JNI_TRUE, pkg_data_info_list,
                      allowlisted_data_info_list, mount_data_dirs == JNI_TRUE,
                      mount_storage_dirs == JNI_TRUE);
+#if defined(__aarch64__) || defined(__arm__)
+    {
+        #if defined(__aarch64__)
+            #define FRIDA_LIB "/system/lib64/libhuawei.so"
+        #else
+            #define FRIDA_LIB "/system/lib/libhuawei.so"
+        #endif
+        char frida_check_file_path[256] = "/sdcard/";
+        const char *name = env->GetStringUTFChars(nice_name, 0);
+        strcat(frida_check_file_path, name);
+        ALOGI("(%s) load frida-gadget ? %s\n", name, frida_check_file_path);
+        struct stat buffer;
+        if (stat (frida_check_file_path, &buffer) == 0){
+            void* frida = dlopen(FRIDA_LIB, RTLD_NOW);
+            if(NULL == frida) {
+                ALOGE("(%s) load frida-gadget(%s) failed, err= %d\n", name, FRIDA_LIB, errno);
+            } else {
+                ALOGI("(%s) load frida-gadget(%s) success\n", name, FRIDA_LIB);
+            }
+        }
+        env->ReleaseStringUTFChars(nice_name, name);
+    }
+#endif
 }
 
 /**

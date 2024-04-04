@@ -1,7 +1,7 @@
 {
-   "interaction": {
-     "type": "script-directory",
-     "on_change": "rescan",
-     "path": "/data/local/tmp/ss"
-   }
+  "interaction": {
+    "type": "script",
+    "path": "/data/local/tmp/ff.js",
+    "on_change": "reload"
+  }
 }
